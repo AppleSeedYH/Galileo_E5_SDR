@@ -37,7 +37,7 @@ end
 i = floor(ch.codeOffset * ch.sampleFreq);
 codeOffset = -(ch.codeOffset-i/ch.sampleFreq);  % unit: s
 phi = ch.interFreq * timeIntv + ch.adr + carFreq * double(i-1) / ch.sampleFreq;       % Compute phi
-spacingOffset = ch.config.SP_CORR*(1/ch.codeRate);
+spacingOffset = ch.config.SP_CORR*(1/ch.codeRate); %from E to P or P to L (unit: s) 
 
 % update offset
 ch.codeOffset=ch.codeOffset+(ch.codeLength/ch.trk.codeFreq)-ch.tCodeCyc;

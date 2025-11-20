@@ -1,3 +1,4 @@
+% https://github.com/tomojitakasu/PocketSDR
 %--- This is the main script
 
 %--- Clean up the environment first
@@ -25,19 +26,13 @@ pvt = pvtNew(config);
 % gcfArray = initRealTimePlot(config);
 %% start process
 numSample=int32(ch(1).tCodeCyc*ch(1).sampleFreq);
-T=ch(1).tCodeCyc;
+T=ch(1).tCodeCyc; % coherent integration time [s]
 buffer=complex(zeros(1,2*numSample));
 %bufferPre=complex(zeros(1, numSample));
 i=0; % index of IF data buffer
 while (i>=0)
     fprintf('\n');
     timeRcv=i*T
-    % i
-    
-    % debug
-    % if (i==469)
-    %     temp=1;
-    % end
 
     % stop processing when the mission is done
     % if (timeRcv>config.skipSecond+config.sToProcess)
@@ -46,6 +41,8 @@ while (i>=0)
     end
 
     % read IF data to buffer
+    % at each loop the buffer contains two times Tcoh (to avoid data/sec
+    % code transition, see Yihan slides)    
     buffer(1,numSample+1:end)=readData(fid, config, T);
 
     % prepare two cycles of prn codes, then start
@@ -62,13 +59,14 @@ while (i>=0)
         % signal acqusiiton and tracking
         ch(j) = chUpdate(ch(j),timeRcv,buffer);
         
-        % update navigation data: eph, ion, and utc info
+        % update navigation data: eph, ion, and utc info (from bits to nav
+        % msg info)
         if (ch(j).nav.stat) 
             pvt = chUpdateNav(pvt,ch(j));
             ch(j).nav.stat=0;
         end
         
-        % update observation data
+        % update observation data (PR construction)
         pvt = pvtUpdateObs(pvt, i, ch(j));
     end
     

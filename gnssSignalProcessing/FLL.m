@@ -1,4 +1,5 @@
 function ch = FLL(ch)
+% FLL order is fixed (1st order)
 
 if ch.lockCount >= 2
     IP1 = real(ch.trk.P(end));

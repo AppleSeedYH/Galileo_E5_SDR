@@ -1,7 +1,7 @@
 function ch = PLL(ch)
-%% constants
-B_PLL      = 5.0;            % band-width of PLL filter (Hz)
 %% PLL
+% PLL order is fixed (2nd order)
+
 IP = real(ch.trk.C(1));  % First element of C
 QP = imag(ch.trk.C(1));  % First element of C
 

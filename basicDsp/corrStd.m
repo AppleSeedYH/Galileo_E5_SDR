@@ -13,6 +13,9 @@ phase=2*pi*phi+(0:N-1)*2*pi*carFreq/fs;
 localCarrier=exp(-1i*phase);
 % mix
 if ix==0 % add 0 at beginning for this special case
+    % workaround: when you are supposed to start from 0 (not allowed index) you start
+    % from 1 and add a zero value to match dimensions (loosing one sample
+    % in the correlation)
     data=[0,buffer(1:ix+N-1)].*localCarrier;
 else
     data=buffer(ix:ix+N-1).*localCarrier;

@@ -61,11 +61,11 @@ function obs = updateObs(time, obs, ch)
     j=1; % this can be improved for multi-frequency receiver
     if (P>0.0)
         % Store measurements
-        obs.data(obs.n).code(j) = code;
-        obs.data(obs.n).P(j)    = P;
-        obs.data(obs.n).L(j)    = -ch.adr + (ch.nav.rev ~= 0)*0.5;
-        obs.data(obs.n).D(j)    = ch.dopFreq;
-        obs.data(obs.n).SNR(j)  = ch.cn0 / Const.SNR_UNIT + 0.5;
+        obs.data(obs.n).code(j) = code; % code type
+        obs.data(obs.n).P(j)    = P;   % pseudorange 
+        obs.data(obs.n).L(j)    = -ch.adr + (ch.nav.rev ~= 0)*0.5; % carrier phase
+        obs.data(obs.n).D(j)    = ch.dopFreq; % doppler
+        obs.data(obs.n).SNR(j)  = ch.cn0 / Const.SNR_UNIT + 0.5; % c/n0
         % phase lock indicator
         if ch.lockCount * ch.tCodeCyc <= 2.0 || abs(ch.trk.errPhas) > 0.2
             obs.data(obs.n).LLI(j) = bitor(obs.data(obs.n).LLI(j), 1);
